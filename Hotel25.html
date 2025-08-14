@@ -986,7 +986,7 @@
         /* Menu Container */
         .menu-container {
             position: relative;
-            z-index: 1000;
+            z-index: 2000;
             height: 48px;
             display: flex;
             align-items: center;
@@ -1243,20 +1243,21 @@
         }
 
         /* Content principale - effetto blur */
-        body {
+        .header,
+        .filter-pills,
+        .room-grid {
             transition: filter 0.3s ease;
         }
 
-        body.menu-open {
+        .header.blurred,
+        .filter-pills.blurred,
+        .room-grid.blurred {
             filter: blur(8px);
+            pointer-events: none;
         }
 
-        /* Esclude il menu dall'effetto blur */
+        /* Il menu container non viene mai sfocato */
         .menu-container {
-            filter: none !important;
-        }
-
-        body.menu-open .menu-container {
             filter: none !important;
         }
 
@@ -2049,8 +2050,14 @@
             menuTrigger.classList.add('active');
             menuTrigger.classList.remove('pulse');
             
-            // Applica effetto blur a tutto il body eccetto il menu
-            document.body.classList.add('menu-open');
+            // Applica effetto blur ai singoli elementi (escludendo il menu)
+            const header = document.querySelector('.header');
+            const filterPills = document.querySelector('.filter-pills');
+            const roomGrid = document.querySelector('.room-grid');
+            
+            if (header) header.classList.add('blurred');
+            if (filterPills) filterPills.classList.add('blurred');
+            if (roomGrid) roomGrid.classList.add('blurred');
             
             menuItems.forEach((item, index) => {
                 setTimeout(() => {
@@ -2067,7 +2074,13 @@
             menuLabel.textContent = '';
             
             // Rimuovi effetto blur
-            document.body.classList.remove('menu-open');
+            const header = document.querySelector('.header');
+            const filterPills = document.querySelector('.filter-pills');
+            const roomGrid = document.querySelector('.room-grid');
+            
+            if (header) header.classList.remove('blurred');
+            if (filterPills) filterPills.classList.remove('blurred');
+            if (roomGrid) roomGrid.classList.remove('blurred');
             
             menuItems.forEach((item) => {
                 item.classList.remove('active');
