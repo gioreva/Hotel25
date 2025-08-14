@@ -1243,21 +1243,21 @@
         }
 
         /* Content principale - effetto blur */
-        .main-content {
+        body {
             transition: filter 0.3s ease;
         }
 
-        .main-content.blurred {
-            filter: blur(8px);
-            pointer-events: none;
-        }
-
-        .header.blurred {
+        body.menu-open {
             filter: blur(8px);
         }
 
-        .filter-pills.blurred {
-            filter: blur(8px);
+        /* Esclude il menu dall'effetto blur */
+        .menu-container {
+            filter: none !important;
+        }
+
+        body.menu-open .menu-container {
+            filter: none !important;
         }
 
         /* Mobile adjustments per menu */
@@ -1980,27 +1980,23 @@
         const menuContainer = document.querySelector('.menu-container');
         let isMenuOpen = false;
 
-        // Auto open/close on mouse enter/leave - solo sul trigger button
+        // Auto open/close on mouse enter/leave
         menuTrigger.addEventListener('mouseenter', () => {
             openMenu();
         });
 
-        // Chiudi solo se si esce completamente dall'area del menu (incluse le icone)
-        menuContainer.addEventListener('mouseleave', (e) => {
-            // Verifica se il mouse è ancora dentro un'area del menu
-            const rect = menuContainer.getBoundingClientRect();
-            const x = e.clientX;
-            const y = e.clientY;
-            
-            // Espandi leggermente i bordi per le icone del menu
-            const expandedLeft = rect.left - 200;
-            const expandedRight = rect.right + 20;
-            const expandedTop = rect.top - 20;
-            const expandedBottom = rect.bottom + 200;
-            
-            if (x < expandedLeft || x > expandedRight || y < expandedTop || y > expandedBottom) {
-                closeMenu();
-            }
+        // Chiudi quando si esce dall'area del menu container
+        menuContainer.addEventListener('mouseleave', () => {
+            closeMenu();
+        });
+
+        // Mantieni aperto quando si passa sopra le icone del menu
+        menuItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                if (!isMenuOpen) {
+                    openMenu();
+                }
+            });
         });
 
         // Mobile touch support
@@ -2053,14 +2049,8 @@
             menuTrigger.classList.add('active');
             menuTrigger.classList.remove('pulse');
             
-            // Applica effetto blur
-            const mainContent = document.querySelector('.main-content');
-            const header = document.querySelector('.header');
-            const filterPills = document.querySelector('.filter-pills');
-            
-            if (mainContent) mainContent.classList.add('blurred');
-            if (header) header.classList.add('blurred');
-            if (filterPills) filterPills.classList.add('blurred');
+            // Applica effetto blur a tutto il body eccetto il menu
+            document.body.classList.add('menu-open');
             
             menuItems.forEach((item, index) => {
                 setTimeout(() => {
@@ -2077,13 +2067,7 @@
             menuLabel.textContent = '';
             
             // Rimuovi effetto blur
-            const mainContent = document.querySelector('.main-content');
-            const header = document.querySelector('.header');
-            const filterPills = document.querySelector('.filter-pills');
-            
-            if (mainContent) mainContent.classList.remove('blurred');
-            if (header) header.classList.remove('blurred');
-            if (filterPills) filterPills.classList.remove('blurred');
+            document.body.classList.remove('menu-open');
             
             menuItems.forEach((item) => {
                 item.classList.remove('active');
