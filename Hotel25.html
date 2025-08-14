@@ -1235,35 +1235,28 @@
         }
 
         /* Content principale - effetto blur */
-        .header,
+        .logo,
+        .stats-bar,
+        .search-box,
+        .view-toggle,
         .filter-pills,
         .room-grid {
             transition: filter 0.3s ease;
         }
 
-        .header.blurred,
+        .logo.blurred,
+        .stats-bar.blurred,
+        .search-box.blurred,
+        .view-toggle.blurred,
         .filter-pills.blurred,
         .room-grid.blurred {
             filter: blur(8px);
             pointer-events: none;
         }
 
-        /* Il menu container e tutto il suo contenuto non vengono mai sfocati */
-        .menu-container,
-        .menu-container *,
-        .menu-trigger,
-        .menu-trigger *,
-        .menu-item,
-        .menu-item *,
-        .menu-label {
+        /* Il menu container non viene mai sfocato */
+        .menu-container {
             filter: none !important;
-            backdrop-filter: none !important;
-        }
-
-        /* Assicura che il menu stia sopra tutto */
-        .header.blurred .menu-container {
-            filter: none !important;
-            position: relative;
             z-index: 9999;
         }
 
@@ -2082,12 +2075,18 @@
             menuTrigger.classList.add('active');
             menuTrigger.classList.remove('pulse');
             
-            // Applica effetto blur ai singoli elementi (escludendo il menu)
-            const header = document.querySelector('.header');
+            // Applica effetto blur ai singoli elementi dell'header (escludendo il menu)
+            const logo = document.querySelector('.logo');
+            const statsBar = document.querySelector('.stats-bar');
+            const searchBox = document.querySelector('.search-box');
+            const viewToggle = document.querySelector('.view-toggle');
             const filterPills = document.querySelector('.filter-pills');
             const roomGrid = document.querySelector('.room-grid');
             
-            if (header) header.classList.add('blurred');
+            if (logo) logo.classList.add('blurred');
+            if (statsBar) statsBar.classList.add('blurred');
+            if (searchBox) searchBox.classList.add('blurred');
+            if (viewToggle) viewToggle.classList.add('blurred');
             if (filterPills) filterPills.classList.add('blurred');
             if (roomGrid) roomGrid.classList.add('blurred');
             
@@ -2106,11 +2105,17 @@
             menuLabel.textContent = '';
             
             // Rimuovi effetto blur
-            const header = document.querySelector('.header');
+            const logo = document.querySelector('.logo');
+            const statsBar = document.querySelector('.stats-bar');
+            const searchBox = document.querySelector('.search-box');
+            const viewToggle = document.querySelector('.view-toggle');
             const filterPills = document.querySelector('.filter-pills');
             const roomGrid = document.querySelector('.room-grid');
             
-            if (header) header.classList.remove('blurred');
+            if (logo) logo.classList.remove('blurred');
+            if (statsBar) statsBar.classList.remove('blurred');
+            if (searchBox) searchBox.classList.remove('blurred');
+            if (viewToggle) viewToggle.classList.remove('blurred');
             if (filterPills) filterPills.classList.remove('blurred');
             if (roomGrid) roomGrid.classList.remove('blurred');
             
