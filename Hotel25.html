@@ -993,16 +993,7 @@
             justify-content: center;
         }
         
-        /* Area hover estesa invisibile - ridotta per evitare apertura da troppo lontano */
-        .menu-container::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            bottom: -120px;
-            left: -120px;
-            z-index: -1;
-        }
+        /* Rimossa area hover invisibile per evitare conflitti */
 
         /* Bottone Menu principale */
         .menu-trigger {
@@ -1046,8 +1037,8 @@
 
         .menu-item {
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1056,6 +1047,7 @@
             opacity: 0;
             transform: translate(0, 0) scale(0);
             pointer-events: none;
+            padding: 5px;
         }
 
         .menu-item.active {
@@ -1981,23 +1973,23 @@
         const menuContainer = document.querySelector('.menu-container');
         let isMenuOpen = false;
 
-        // Auto open/close on mouse enter/leave
-        menuTrigger.addEventListener('mouseenter', () => {
-            openMenu();
+        // Semplice logica hover senza conflitti
+        let hoverTimeout;
+
+        menuContainer.addEventListener('mouseenter', () => {
+            clearTimeout(hoverTimeout);
+            if (!isMenuOpen) {
+                openMenu();
+            }
         });
 
-        // Chiudi quando si esce dall'area del menu container
         menuContainer.addEventListener('mouseleave', () => {
-            closeMenu();
-        });
-
-        // Mantieni aperto quando si passa sopra le icone del menu
-        menuItems.forEach(item => {
-            item.addEventListener('mouseenter', () => {
-                if (!isMenuOpen) {
-                    openMenu();
+            clearTimeout(hoverTimeout);
+            hoverTimeout = setTimeout(() => {
+                if (isMenuOpen) {
+                    closeMenu();
                 }
-            });
+            }, 100); // Piccolo delay per evitare chiusure accidentali
         });
 
         // Mobile touch support
