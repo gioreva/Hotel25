@@ -986,9 +986,13 @@
         /* Menu Container */
         .menu-container {
             position: fixed;
-            top: 30px;
-            right: 30px;
+            top: 1.5rem;
+            right: 2rem;
             z-index: 1000;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         /* Area hover estesa invisibile */
@@ -1004,8 +1008,8 @@
 
         /* Bottone Menu principale */
         .menu-trigger {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1013,7 +1017,9 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             z-index: 10;
-            background: transparent;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
         }
 
         .menu-trigger:hover svg {
@@ -1067,43 +1073,43 @@
         
         /* 1. Camere - Esterno - 0° (sinistra pura) */
         .menu-item.active:nth-child(1) {
-            transform: translate(-160px, 0px) scale(1);
+            transform: translate(-180px, 0px) scale(1);
             transition-delay: 0.05s;
         }
 
         /* 2. Card - Interno - 12.857° */
         .menu-item.active:nth-child(2) {
-            transform: translate(-108px, 25px) scale(0.9);
+            transform: translate(-128px, 35px) scale(0.9);
             transition-delay: 0.1s;
         }
 
         /* 3. Planner - Esterno - 25.714° */
         .menu-item.active:nth-child(3) {
-            transform: translate(-144px, 70px) scale(1);
+            transform: translate(-164px, 80px) scale(1);
             transition-delay: 0.15s;
         }
 
         /* 4. Clienti - Interno - 38.571° */
         .menu-item.active:nth-child(4) {
-            transform: translate(-87px, 70px) scale(0.9);
+            transform: translate(-107px, 80px) scale(0.9);
             transition-delay: 0.2s;
         }
 
         /* 5. Parti comuni - Esterno - 51.429° */
         .menu-item.active:nth-child(5) {
-            transform: translate(-103px, 123px) scale(1);
+            transform: translate(-123px, 143px) scale(1);
             transition-delay: 0.25s;
         }
 
         /* 6. Log - Interno - 64.286° */
         .menu-item.active:nth-child(6) {
-            transform: translate(-48px, 100px) scale(0.9);
+            transform: translate(-68px, 120px) scale(0.9);
             transition-delay: 0.3s;
         }
 
         /* 7. Settings - Esterno - 77.143° */
         .menu-item.active:nth-child(7) {
-            transform: translate(-40px, 154px) scale(1);
+            transform: translate(-60px, 174px) scale(1);
             transition-delay: 0.35s;
         }
 
@@ -1236,6 +1242,24 @@
 
         .menu-trigger.pulse svg {
             animation: glow 3s infinite;
+        }
+
+        /* Content principale - effetto blur */
+        .main-content {
+            transition: filter 0.3s ease;
+        }
+
+        .main-content.blurred {
+            filter: blur(8px);
+            pointer-events: none;
+        }
+
+        .header.blurred {
+            filter: blur(8px);
+        }
+
+        .filter-pills.blurred {
+            filter: blur(8px);
         }
 
         /* Mobile adjustments per menu */
@@ -2018,6 +2042,15 @@
             menuTrigger.classList.add('active');
             menuTrigger.classList.remove('pulse');
             
+            // Applica effetto blur
+            const mainContent = document.querySelector('.main-content');
+            const header = document.querySelector('.header');
+            const filterPills = document.querySelector('.filter-pills');
+            
+            if (mainContent) mainContent.classList.add('blurred');
+            if (header) header.classList.add('blurred');
+            if (filterPills) filterPills.classList.add('blurred');
+            
             menuItems.forEach((item, index) => {
                 setTimeout(() => {
                     item.classList.add('active');
@@ -2031,6 +2064,15 @@
             menuTrigger.classList.remove('active');
             menuLabel.classList.remove('active');
             menuLabel.textContent = '';
+            
+            // Rimuovi effetto blur
+            const mainContent = document.querySelector('.main-content');
+            const header = document.querySelector('.header');
+            const filterPills = document.querySelector('.filter-pills');
+            
+            if (mainContent) mainContent.classList.remove('blurred');
+            if (header) header.classList.remove('blurred');
+            if (filterPills) filterPills.classList.remove('blurred');
             
             menuItems.forEach((item) => {
                 item.classList.remove('active');
