@@ -993,14 +993,14 @@
             justify-content: center;
         }
         
-        /* Area hover estesa invisibile */
+        /* Area hover estesa invisibile - ridotta per evitare apertura da troppo lontano */
         .menu-container::before {
             content: '';
             position: absolute;
-            top: -60px;
-            right: -60px;
-            bottom: -200px;
-            left: -200px;
+            top: -20px;
+            right: -20px;
+            bottom: -120px;
+            left: -120px;
             z-index: -1;
         }
 
@@ -1980,13 +1980,27 @@
         const menuContainer = document.querySelector('.menu-container');
         let isMenuOpen = false;
 
-        // Auto open/close on mouse enter/leave del container
-        menuContainer.addEventListener('mouseenter', () => {
+        // Auto open/close on mouse enter/leave - solo sul trigger button
+        menuTrigger.addEventListener('mouseenter', () => {
             openMenu();
         });
 
-        menuContainer.addEventListener('mouseleave', () => {
-            closeMenu();
+        // Chiudi solo se si esce completamente dall'area del menu (incluse le icone)
+        menuContainer.addEventListener('mouseleave', (e) => {
+            // Verifica se il mouse è ancora dentro un'area del menu
+            const rect = menuContainer.getBoundingClientRect();
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            // Espandi leggermente i bordi per le icone del menu
+            const expandedLeft = rect.left - 200;
+            const expandedRight = rect.right + 20;
+            const expandedTop = rect.top - 20;
+            const expandedBottom = rect.bottom + 200;
+            
+            if (x < expandedLeft || x > expandedRight || y < expandedTop || y > expandedBottom) {
+                closeMenu();
+            }
         });
 
         // Mobile touch support
