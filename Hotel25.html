@@ -82,20 +82,58 @@
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
         }
 
-        .logo::before {
-            content: '🏨';
-            font-size: 1.8rem;
-            -webkit-text-fill-color: initial;
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 2px 8px rgba(59, 130, 246, 0.3));
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover .logo-icon svg {
+            transform: scale(1.05);
+            filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.5));
+        }
+
+        .logo-text {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #3b82f6 0%, #a855f7 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .logo-text::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, #3b82f6, #a855f7);
+            transition: width 0.3s ease;
+        }
+
+        .logo:hover .logo-text::after {
+            width: 100%;
         }
 
         /* Stats Bar */
@@ -1280,7 +1318,95 @@
     <header class="header" id="header">
         <div class="header-content">
             <div class="logo">
-                Hotel Paradiso
+                <div class="logo-icon">
+                    <svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Definizioni gradienti e filtri -->
+                        <defs>
+                            <linearGradient id="crystalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.8" />
+                                <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:0.6" />
+                                <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.4" />
+                            </linearGradient>
+                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                <feMerge> 
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        
+                        <!-- Cristallo geometrico centrale -->
+                        <g transform="translate(21,21)">
+                            <!-- Cristallo principale -->
+                            <path d="M0,-14 L10,-7 L10,7 L0,14 L-10,7 L-10,-7 Z" 
+                                  fill="url(#crystalGradient)" 
+                                  stroke="rgba(255,255,255,0.3)" 
+                                  stroke-width="0.5"
+                                  filter="url(#glow)">
+                                <animateTransform attributeName="transform" 
+                                                attributeType="XML" 
+                                                type="rotate" 
+                                                from="0" 
+                                                to="360" 
+                                                dur="20s" 
+                                                repeatCount="indefinite"/>
+                            </path>
+                            
+                            <!-- Cristallo interno -->
+                            <path d="M0,-8 L6,-4 L6,4 L0,8 L-6,4 L-6,-4 Z" 
+                                  fill="rgba(255,255,255,0.2)" 
+                                  stroke="rgba(255,255,255,0.5)" 
+                                  stroke-width="0.3">
+                                <animateTransform attributeName="transform" 
+                                                attributeType="XML" 
+                                                type="rotate" 
+                                                from="360" 
+                                                to="0" 
+                                                dur="15s" 
+                                                repeatCount="indefinite"/>
+                            </path>
+                            
+                            <!-- Punto centrale luminoso -->
+                            <circle cx="0" cy="0" r="2" fill="rgba(255,255,255,0.9)">
+                                <animate attributeName="r" values="2;3;2" dur="3s" repeatCount="indefinite"/>
+                                <animate attributeName="opacity" values="0.9;0.6;0.9" dur="3s" repeatCount="indefinite"/>
+                            </circle>
+                        </g>
+                        
+                        <!-- Onde fluide di base -->
+                        <path d="M2,35 Q8,32 14,35 T26,35 Q32,32 38,35 L40,38 L2,38 Z" 
+                              fill="url(#waveGradient)" 
+                              opacity="0.6">
+                            <animate attributeName="d" 
+                                   values="M2,35 Q8,32 14,35 T26,35 Q32,32 38,35 L40,38 L2,38 Z;
+                                           M2,35 Q8,38 14,35 T26,35 Q32,38 38,35 L40,38 L2,38 Z;
+                                           M2,35 Q8,32 14,35 T26,35 Q32,32 38,35 L40,38 L2,38 Z" 
+                                   dur="4s" 
+                                   repeatCount="indefinite"/>
+                        </path>
+                        
+                        <!-- Onde fluide superiori -->
+                        <path d="M4,30 Q10,27 16,30 T28,30 Q34,27 40,30" 
+                              stroke="url(#waveGradient)" 
+                              stroke-width="1.5" 
+                              fill="none" 
+                              opacity="0.4">
+                            <animate attributeName="d" 
+                                   values="M4,30 Q10,27 16,30 T28,30 Q34,27 40,30;
+                                           M4,30 Q10,33 16,30 T28,30 Q34,33 40,30;
+                                           M4,30 Q10,27 16,30 T28,30 Q34,27 40,30" 
+                                   dur="5s" 
+                                   repeatCount="indefinite"/>
+                        </path>
+                    </svg>
+                </div>
+                <div class="logo-text">PARADISO</div>
             </div>
             
             <div class="stats-bar">
