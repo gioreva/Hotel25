@@ -1248,9 +1248,23 @@
             pointer-events: none;
         }
 
-        /* Il menu container non viene mai sfocato */
-        .menu-container {
+        /* Il menu container e tutto il suo contenuto non vengono mai sfocati */
+        .menu-container,
+        .menu-container *,
+        .menu-trigger,
+        .menu-trigger *,
+        .menu-item,
+        .menu-item *,
+        .menu-label {
             filter: none !important;
+            backdrop-filter: none !important;
+        }
+
+        /* Assicura che il menu stia sopra tutto */
+        .header.blurred .menu-container {
+            filter: none !important;
+            position: relative;
+            z-index: 9999;
         }
 
         /* Mobile adjustments per menu */
@@ -1973,23 +1987,49 @@
         const menuContainer = document.querySelector('.menu-container');
         let isMenuOpen = false;
 
-        // Semplice logica hover senza conflitti
+        // Logica cerchio piccolo per aprire, cerchio grande per mantenere aperto
         let hoverTimeout;
 
-        menuContainer.addEventListener('mouseenter', () => {
+        // Cerchio piccolo per aprire - solo sul trigger button
+        menuTrigger.addEventListener('mouseenter', () => {
             clearTimeout(hoverTimeout);
             if (!isMenuOpen) {
                 openMenu();
             }
         });
 
-        menuContainer.addEventListener('mouseleave', () => {
-            clearTimeout(hoverTimeout);
-            hoverTimeout = setTimeout(() => {
-                if (isMenuOpen) {
-                    closeMenu();
-                }
-            }, 100); // Piccolo delay per evitare chiusure accidentali
+        // Funzione per controllare se il mouse è nell'area estesa (cerchio grande)
+        function isInExtendedArea(event) {
+            if (!menuContainer) return false;
+            
+            const rect = menuTrigger.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const mouseX = event.clientX;
+            const mouseY = event.clientY;
+            
+            // Calcola la distanza dal centro del trigger
+            const distance = Math.sqrt(
+                Math.pow(mouseX - centerX, 2) + Math.pow(mouseY - centerY, 2)
+            );
+            
+            // Cerchio grande per mantenere aperto (raggio 200px)
+            return distance <= 200;
+        }
+
+        // Controlla quando il mouse esce dall'area estesa
+        document.addEventListener('mousemove', (event) => {
+            if (isMenuOpen && !isInExtendedArea(event)) {
+                clearTimeout(hoverTimeout);
+                hoverTimeout = setTimeout(() => {
+                    if (isMenuOpen) {
+                        closeMenu();
+                    }
+                }, 150);
+            } else if (isMenuOpen) {
+                clearTimeout(hoverTimeout);
+            }
         });
 
         // Mobile touch support
